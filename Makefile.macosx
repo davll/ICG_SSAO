@@ -1,0 +1,29 @@
+CFLAGS	:= -Wall
+LDFLAGS	:= -framework Cocoa
+LDFLAGS += -framework OpenGL
+LDFLAGS += -framework GLUT
+
+OBJS	:= build.dir/glew.o build.dir/main.o build.dir/glm.o
+OBJS	+= build.dir/Framebuffers.o build.dir/Model.o 
+OBJS	+= build.dir/ShaderModel.o build.dir/ShaderSSAO.o 
+OBJS	+= build.dir/ShaderBase.o build.dir/ShaderCopy.o 
+OBJS	+= build.dir/ShaderBlur.o 
+OBJS	+= build.dir/Render.o build.dir/HUDConsole.o 
+OBJS	+= build.dir/gli_misc.o build.dir/gli_tga.o 
+OBJS	+= build.dir/gli_convert.o build.dir/gli_scale.o build.dir/loadtex.o 
+
+build.dir/%.o : source/%.cpp build.dir
+	$(CXX) -c $(CFLAGS) $< -o $@
+
+build.dir/%.o : source/%.c build.dir
+	$(CC) -c $(CFLAGS) $< -o $@
+
+all: $(OBJS)
+	$(CXX) -o ICG_SSAO $(OBJS) $(LDFLAGS)
+
+build.dir:
+	[ ! -d build.dir ] && mkdir build.dir
+
+clean:
+	rm -rf build.dir
+	rm -f ICG_SSAO
